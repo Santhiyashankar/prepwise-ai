@@ -1,0 +1,160 @@
+import { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { Loader2 } from 'lucide-react'
+import AuthLayout from '../components/layout/AuthLayout.jsx'
+import FormInput from '../components/common/FormInput.jsx'
+import { useAuth } from '../context/AuthContext.jsx'
+import {
+  validateConfirmPassword,
+  validateEmail,
+  validateFullName,
+  validatePassword,
+} from '../utils/validators.js'
+
+function Register() {
+  const { register } = useAuth()
+  const navigate = useNavigate()
+
+  const [formData, setFormData] = useState({
+    fullName: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+  })
+  const [fieldErrors, setFieldErrors] = useState({})
+  const [serverError, setServerError] = useState('')
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
+  const handleChange = (event) => {
+    const { name, value } = event.target
+    setFormData((prev) => ({ ...prev, [name]: value }))
+    setFieldErrors((prev) => ({ ...prev, [name]: '' }))
+    setServerError('')
+  }
+
+  const validate = () => {
+    const errors = {
+      fullName: validateFullName(formData.fullName),
+      email: validateEmail(formData.email),
+      password: validatePassword(formData.password),
+      confirmPassword: validateConfirmPassword(formData.password, formData.confirmPassword),
+    }
+    setFieldErrors(errors)
+    return Object.values(errors).every((error) => !error)
+  }
+
+  const handleSubmit = async (event) => {
+    event.preventDefault()
+    if (!validate()) return
+
+    setIsSubmitting(true)
+    setServerError('')
+
+    try {
+      await register({
+        fullName: formData.fullName,
+        email: formData.email,
+        password: formData.password,
+      })
+      navigate('/dashboard', { replace: true })
+    } catch (error) {
+      setServerError(error.response?.data?.message || 'Registration failed. Please try again.')
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+  return (
+    <AuthLayout
+      eyebrow="GET STARTED"
+      title="Create your account"
+      subtitle="Your first mock interview is on us."
+      footer={
+        <>
+          Already have an account?{' '}
+          <Link to="/login" className="text-signal-amber font-medium hover:underline">
+            Log in
+          </Link>
+        </>
+      }
+    >
+      <form onSubmit={handleSubmit} noValidate className="space-y-5">
+        {serverError && (
+          <div className="rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-400">
+            {serverError}
+          </div>
+        )}
+
+        <FormInput
+          id="fullName"
+          name="fullName"
+          label="Full name"
+          placeholder="Jane Doe"
+          value={formData.fullName}
+          onChange={handleChange}
+          error={fieldErrors.fullName}
+          autoComplete="name"
+        />
+
+        <FormInput
+          id="email"
+          name="email"
+          type="email"
+          label="Email address"
+          placeholder="you@example.com"
+          value={formData.email}
+          onChange={handleChange}
+          error={fieldErrors.email}
+          autoComplete="email"
+        />
+
+        <FormInput
+          id="password"
+          name="password"
+          type="password"
+          label="Password"
+          placeholder="At least 8 characters"
+          value={formData.password}
+          onChange={handleChange}
+          error={fieldErrors.password}
+          autoComplete="new-password"
+        />
+
+        <FormInput
+          id="confirmPassword"
+          name="confirmPassword"
+          type="password"
+          label="Confirm password"
+          placeholder="Re-enter your password"
+          value={formData.confirmPassword}
+          onChange={handleChange}
+          error={fieldErrors.confirmPassword}
+          autoComplete="new-password"
+        />
+
+        <button
+          type="submit"
+          disabled={isSubmitting}
+          className="w-full inline-flex items-center justify-center gap-2 rounded-lg bg-signal-amber px-6 py-3 text-sm font-semibold text-ink hover:bg-signal-amber/90 disabled:opacity-60 disabled:cursor-not-allowed transition-colors"
+        >
+          {isSubmitting && <Loader2 size={16} className="animate-spin" />}
+          {isSubmitting ? 'Creating account…' : 'Create account'}
+        </button>
+
+        <p className="text-xs text-muted text-center leading-relaxed">
+          By registering you agree to our{' '}
+          <Link to="/terms" className="text-signal-amber hover:underline">
+            Terms
+          </Link>{' '}
+          and{' '}
+          <Link to="/privacy" className="text-signal-amber hover:underline">
+            Privacy Policy
+          </Link>
+          .
+        </p>
+      </form>
+    </AuthLayout>
+  )
+}
+
+export default Register

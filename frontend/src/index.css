@@ -1,0 +1,147 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* =========================================================
+   GLOBAL
+========================================================= */
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: "Inter", sans-serif;
+  background: var(--dash-bg);
+  color: var(--dash-text);
+  transition:
+    background-color .25s ease,
+    color .25s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+::selection {
+  background: #ffb020;
+  color: #0b1220;
+}
+
+:focus-visible {
+  outline: 2px solid #ffb020;
+  outline-offset: 2px;
+}
+
+.container-page {
+  @apply mx-auto w-full max-w-7xl px-6 lg:px-8;
+}
+
+/* =========================================================
+   DEFAULT (Dark)
+========================================================= */
+
+:root {
+  --dash-bg: #0b1220;
+  --dash-surface: #131c2e;
+  --dash-surface-hover: #1b263b;
+
+  --dash-card: #182234;
+  --dash-sidebar: #111827;
+
+  --dash-text: #f8fafc;
+  --dash-muted: #94a3b8;
+
+  --dash-border: #233047;
+
+  --dash-success: #22c55e;
+  --dash-danger: #ef4444;
+  --dash-warning: #ffb020;
+
+  --dash-shadow: rgba(0,0,0,.35);
+}
+
+/* =========================================================
+   DARK
+========================================================= */
+
+.dark {
+  --dash-bg: #0b1220;
+  --dash-surface: #131c2e;
+  --dash-surface-hover: #1b263b;
+
+  --dash-card: #182234;
+  --dash-sidebar: #111827;
+
+  --dash-text: #f8fafc;
+  --dash-muted: #94a3b8;
+
+  --dash-border: #233047;
+
+  --dash-success: #22c55e;
+  --dash-danger: #ef4444;
+  --dash-warning: #ffb020;
+
+  --dash-shadow: rgba(0,0,0,.35);
+}
+
+/* =========================================================
+   LIGHT
+========================================================= */
+
+.light {
+  --dash-bg: #f8fafc;
+  --dash-surface: #ffffff;
+  --dash-surface-hover: #f1f5f9;
+
+  --dash-card: #ffffff;
+  --dash-sidebar: #ffffff;
+
+  --dash-text: #111827;
+  --dash-muted: #64748b;
+
+  --dash-border: #d1d5db;
+
+  --dash-success: #16a34a;
+  --dash-danger: #dc2626;
+  --dash-warning: #d97706;
+
+  --dash-shadow: rgba(0,0,0,.08);
+}
+
+/* =========================================================
+   GLOBAL ELEMENTS
+========================================================= */
+
+body {
+  background: var(--dash-bg);
+  color: var(--dash-text);
+}
+
+input,
+textarea,
+select {
+  background: var(--dash-surface);
+  color: var(--dash-text);
+  border-color: var(--dash-border);
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--dash-muted);
+}
+
+button {
+  transition: all .2s ease;
+}

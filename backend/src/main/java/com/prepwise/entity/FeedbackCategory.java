@@ -1,0 +1,12 @@
+package com.prepwise.entity;
+
+public enum FeedbackCategory {
+    STRENGTH,
+    WEAKNESS,
+    MISSING_SECTION,
+    GRAMMAR_SUGGESTION,
+    FORMATTING_SUGGESTION,
+    PROJECT_IMPROVEMENT,
+    EXPERIENCE_IMPROVEMENT,
+    SKILL_SUGGESTION
+}
